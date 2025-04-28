@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz - Transição Energética e Justiça Climática</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        #container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .option-btn {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #e0e0e0;
+            border: none;
+            border-radius: 5px;
+        }
+        .option-btn.correct {
+            background-color: #8bc34a;
+            color: white;
+        }
+        .option-btn.wrong {
+            background-color: #f44336;
+            color: white;
+        }
+        #start-btn, #next-btn {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin-top: 20px;
+            cursor: pointer;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        #score {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <h1>Transição Energética e Justiça Climática</h1>
+    <div id="start-screen">
+        <button id="start-btn">Iniciar Quiz</button>
+    </div>
+
+    <div id="quiz-screen" style="display: none;">
+        <h2 id="question-text"></h2>
+        <div id="options"></div>
+        <button id="next-btn" style="display: none;">Próxima</button>
+        <div id="score" style="display: none;"></div>
+    </div>
+</div>
+
+<script>
+const perguntas = [
+
+  {
+    pergunta: "1. Qual teoria surgiu no contexto do carvão e energia a vapor na Revolução Industrial?",
+    opcoes: [
+      "Teoria Contingencial",
+      "Teoria da Excelência",
+      "Administração Científica",
+      "Teoria Burocrática"
+    ],
+    correta: 2
+  },
+  {
+    pergunta: "2. A teoria de Fayol contribuiu para:",
+    opcoes: [
+      "Estruturação hierárquica das organizações",
+      "Redução de custos com energia",
+      "Inovação tecnológica",
+      "Autogestão horizontal"
+    ],
+    correta: 0
+  },
+  {
+    pergunta: "3. A teoria das relações humanas surgiu durante a transição energética para:",
+    opcoes: [
+      "Eletricidade",
+      "Petróleo",
+      "Carvão",
+      "Energia solar"
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "4. A teoria burocrática de Weber foi marcada por qual contexto energético?",
+    opcoes: [
+      "Energia solar",
+      "Eletrificação e petróleo",
+      "Gás natural",
+      "Biomassa"
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "5. A Teoria X e Y de McGregor está relacionada a qual avanço energético?",
+    opcoes: [
+      "Carvão e vapor",
+      "Gás natural",
+      "Energia solar",
+      "Energia nuclear e eletricidade"
+    ],
+    correta: 3
+  },
+  {
+    pergunta: "6. A visão sistêmica considera a organização como:",
+    opcoes: [
+      "Um sistema aberto que interage com o ambiente",
+      "Um conjunto de regras rígidas",
+      "Uma unidade autônoma",
+      "Uma hierarquia mecânica"
+    ],
+    correta: 0
+  },
+  {
+    pergunta: "7. A teoria contingencial afirma que:",
+    opcoes: [
+      "Toda empresa deve seguir regras fixas",
+      "A estrutura ideal depende do contexto organizacional",
+      "A cultura organizacional deve ser padronizada",
+      "A burocracia é essencial"
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "8. Qual teoria está associada ao início das energias renováveis?",
+    opcoes: [
+      "Teoria de Fayol",
+      "Teoria Científica",
+      "Teoria da Excelência",
+      "Teoria de Weber"
+    ],
+    correta: 2
+  },
+  {
+    pergunta: "9. A cultura organizacional como fator estratégico foi enfatizada por:",
+    opcoes: [
+      "Taylor",
+      "McGregor",
+      "Edgar Schein",
+      "Burns e Stalker"
+    ],
+    correta: 2
+  },
+  {
+    pergunta: "10. Peter Drucker contribuiu com a:",
+    opcoes: [
+      "Administração por objetivos",
+      "Teoria Burocrática",
+      "Teoria Sistêmica",
+      "Teoria de Reconhecimento"
+    ],
+    correta: 0
+  },
+  {
+    pergunta: "11. Os caçadores-coletores utilizavam energia proveniente de:",
+    opcoes: [
+      "Energia solar",
+      "Força muscular e fogo",
+      "Gás natural",
+      "Eletricidade"
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "12. A agricultura trouxe impactos como:",
+    opcoes: [
+      "Desmatamento e redução da biodiversidade",
+      "Poluição atmosférica",
+      "Emissão de CO₂",
+      "Reflorestamento"
+    ],
+    correta: 0
+  },
+  {
+    pergunta: "13. A Idade Agrária Inicial marcou:",
+    opcoes: [
+      "Introdução do carvão mineral",
+      "Uso de energia nuclear",
+      "Expansão da agricultura e uso de animais de tração",
+      "Construção de usinas hidrelétricas"
+    ],
+    correta: 2
+  },
+  {
+    pergunta: "14. A Idade Agrária Tardia trouxe:",
+    opcoes: [
+      "Uso de turbinas",
+      "Eletrificação rural",
+      "Avanços tecnológicos como o arado de ferro",
+      "Redução da população rural"
+    ],
+    correta: 2
+  },
+  {
+    pergunta: "15. A Revolução Industrial foi impulsionada por:",
+    opcoes: [
+      "Energia solar",
+      "Gás natural",
+      "Carvão e máquina a vapor",
+      "Eletricidade e energia nuclear"
+    ],
+    correta: 2
+  },
+  {
+    pergunta: "16. O uso do carvão gerava:",
+    opcoes: [
+      "Biodiversidade",
+      "Crescimento sustentável",
+      "Poluição do ar e problemas respiratórios",
+      "Melhoria da qualidade do solo"
+    ],
+    correta: 2
+  },
+  {
+    pergunta: "17. A Era Tardia dos combustíveis fósseis se caracteriza por:",
+    opcoes: [
+      "Uso intensivo de petróleo e gás natural",
+      "Expansão da energia solar",
+      "Redução do consumo energético",
+      "Uso exclusivo de carvão"
+    ],
+    correta: 0
+  },
+  {
+    pergunta: "18. Os impactos da exploração de petróleo incluem:",
+    opcoes: [
+      "Reflorestamento",
+      "Refrigeração do planeta",
+      "Geração de energia limpa",
+      "Derramamentos e poluição marinha"
+    ],
+    correta: 3
+  },
+  {
+    pergunta: "19. Um efeito global do uso de combustíveis fósseis é:",
+    opcoes: [
+      "Redução das chuvas",
+      "Aumento dos gases de efeito estufa",
+      "Equilíbrio climático",
+      "Geração de renda sustentável"
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "20. A Era das Energias Renováveis começou após:",
+    opcoes: [
+      "1800",
+      "1900",
+      "1945",
+      "2000"
+    ],
+    correta: 2
+  },
+  {
+    pergunta: "21. Qual das seguintes é uma fonte não renovável?",
+    opcoes: [
+      "Energia solar",
+      "Energia nuclear",
+      "Energia eólica",
+      "Energia das marés"
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "22. A energia solar é gerada por:",
+    opcoes: [
+      "Conversão da luz solar em eletricidade",
+      "Queima de combustíveis fósseis",
+      "Vibração do solo",
+      "Energia de marés"
+    ],
+    correta: 0
+  },
+  {
+    pergunta: "23. A biomassa é renovável quando:",
+    opcoes: [
+      "Usada com carvão",
+      "Queimada com gás natural",
+      "O consumo não excede a regeneração dos recursos",
+      "É industrializada"
+    ],
+    correta: 2
+  },
+  {
+    pergunta: "24. A energia eólica é obtida por meio:",
+    opcoes: [
+      "Da luz solar",
+      "Da queima de madeira",
+      "Da força dos ventos movimentando turbinas",
+      "De ondas sonoras"
+    ],
+    correta: 2
+  },
+  {
+    pergunta: "25. Uma vantagem das energias renováveis é:",
+    opcoes: [
+      "Baixa emissão de gases de efeito estufa",
+      "Custo mais alto",
+      "Dependência externa",
+      "Geração contínua de poluentes"
+    ],
+    correta: 0
+  },
+  {
+    pergunta: "26. As redes inteligentes servem para:",
+    opcoes: [
+      "Controlar a agricultura",
+      "Otimizar o uso da energia elétrica com comunicação bidirecional",
+      "Gerar energia em baterias",
+      "Remover poluentes"
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "27. O hidrogênio verde é obtido por:",
+    opcoes: [
+      "Refino do petróleo",
+      "Combustão de biomassa",
+      "Eletrólise da água usando fontes renováveis",
+      "Queima de gás natural"
+    ],
+    correta: 2
+  },
+  {
+    pergunta: "28. A energia das marés:",
+    opcoes: [
+      "É gerada por painéis solares",
+      "Usa o fluxo e refluxo da água para gerar eletricidade",
+      "Requer carvão",
+      "Usa turbinas nucleares"
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "29. O armazenamento de energia é importante porque:",
+    opcoes: [
+      "Equilibra oferta e demanda de fontes intermitentes",
+      "Substitui a energia solar",
+      "Garante o uso de combustíveis fósseis",
+      "Diminui a eficiência energética"
+    ],
+    correta: 0
+  },
+  {
+    pergunta: "30. A energia geotérmica é vantajosa porque:",
+    opcoes: [
+      "Gera resíduos",
+      "Depende do sol",
+      "Aproveita o calor interno da Terra",
+      "Exige gás natural"
+    ],
+    correta: 2
+  },
+  {
+    pergunta: "31. O Protocolo de Kyoto foi o primeiro a:",
+    opcoes: [
+      "Estabelecer metas obrigatórias de redução de emissões para países desenvolvidos",
+      "Eliminar o uso de petróleo",
+      "Promover apenas energia eólica",
+      "Criar painéis solares globais"
+    ],
+    correta: 0
+  },
+  {
+    pergunta: "32. O Acordo de Paris busca:",
+    opcoes: [
+      "Reduzir a poluição em países ricos",
+      "Eliminar o carvão no mundo",
+      "Limitar o aumento da temperatura global a 1,5°C",
+      "Criar energia nuclear gratuita"
+    ],
+    correta: 2
+  },
+  {
+    pergunta: "33. As NDCs representam:",
+    opcoes: [
+      "Regras de mineração",
+      "Compromissos nacionais de redução de emissões",
+      "Programas de reciclagem",
+      "Subvenções ao carvão"
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "34. Um desafio na implementação dos acordos é:",
+    opcoes: [
+      "Falta de tecnologia",
+      "Custo do carvão",
+      "Alinhar interesses políticos e econômicos distintos",
+      "Geração de energia solar"
+    ],
+    correta: 2
+  },
+  {
+    pergunta: "35. As COPs são importantes porque:",
+    opcoes: [
+      "Permitem avaliar os avanços e negociar ações climáticas",
+      "Criam barragens",
+      "Substituem ministérios",
+      "Regulam o preço da energia"
+    ],
+    correta: 0
+  },
+  {
+    pergunta: "36. Um fator-chave para o sucesso dos acordos é:",
+    opcoes: [
+      "Produção local de carvão",
+      "Cooperação internacional contínua",
+      "Expansão de hidrelétricas",
+      "Criação de combustíveis fósseis"
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "37. As metas climáticas dependem de:",
+    opcoes: [
+      "Temperatura dos oceanos",
+      "Vontade política e recursos tecnológicos",
+      "Crescimento demográfico",
+      "Preço do petróleo"
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "38. O comércio de emissões é um:",
+    opcoes: [
+      "Subsídio ao carvão",
+      "Sistema de doações verdes",
+      "Mecanismo de mercado para atingir metas de emissão",
+      "Projeto de reflorestamento urbano"
+    ],
+    correta: 2
+  },
+  {
+    pergunta: "39. O Acordo de Paris inclui:",
+    opcoes: [
+      "Só países da OCDE",
+      "Todos os países, e não apenas os desenvolvidos",  
+      "Apenas países da União Europeia",
+      "Países com petróleo"
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "40. O sucesso climático global exige:",
+    opcoes: [
+      "Menos campanhas",
+      "Comprometimento e ações concretas de todos os países",
+      "Taxas de carbono fixas",
+      "Proibição da energia eólica"
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "41. A justiça climática busca:",
+    opcoes: [
+      "Remover CO₂ de áreas ricas",
+      "Aumentar o uso de combustíveis fósseis",
+      "Corrigir desigualdades sociais nos impactos climáticos",
+      "Criar um imposto global"
+    ],
+    correta: 2
+  },
+  {
+    pergunta: "42. Um tipo de justiça que trata de quem participa das decisões é:",
+    opcoes: [
+      "Justiça restaurativa",
+      "Justiça distributiva",
+      "Justiça procedimental",
+      "Justiça de reconhecimento"
+    ],
+    correta: 2
+  },
+  {
+    pergunta: "43. A justiça de reconhecimento foca em:",
+    opcoes: [
+      "Redução do CO₂",
+      "Eficiência energética",
+      "Crescimento urbano",
+      "Respeito à diversidade cultural e política"
+    ],
+    correta: 3
+  },
+  {
+    pergunta: "44. O racismo ambiental é evidenciado por:",
+    opcoes: [
+      "Localização de atividades poluentes em áreas de populações vulneráveis",
+      "Exclusão de países ricos",
+      "Uso de energia solar em zonas rurais",
+      "Queima de carvão em cidades"
+    ],
+    correta: 0
+  },
+  {
+    pergunta: "45. A equidade socioambiental inclui:",
+    opcoes: [
+      "Tarifas fixas de energia",
+      "Acesso igualitário aos recursos naturais",
+      "Uso obrigatório de energia eólica",
+      "Exportação de gás natural"
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "46. A mídia contribui com a educação ambiental ao:",
+    opcoes: [
+      "Criar produtos verdes",
+      "Financiar usinas",
+      "Ensinar mineração",
+      "Disseminar informações e formar opinião pública"
+    ],
+    correta: 3
+  },
+  {
+    pergunta: "47. As ONGs atuam na educação ambiental por meio de:",
+    opcoes: [
+      "Projetos práticos e campanhas de conscientização",
+      "Gestão de usinas nucleares",
+      "Criação de impostos",
+      "Venda de painéis solares"
+    ],
+    correta: 0
+  },
+  {
+    pergunta: "48. A educação ao ar livre promove:",
+    opcoes: [
+      "Produção de energia solar",
+      "Contato direto com a natureza para aprendizado ambiental",
+      "Uso de drones em florestas",
+      "Consumo de biomassa"
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "49. Um recurso digital útil para educação ambiental é:",
+    opcoes: [
+      "Motores a gás",
+      "Aplicativos, jogos e e-learning",
+      "Televisores a carvão",
+      "Celulares a querosene"
+    ],
+    correta: 1
+  },
+  {
+    pergunta: "50. A participação cidadã na transição energética ocorre através de:",
+    opcoes: [
+      "Financiamento de termoelétricas",
+      "Criação de estatais",
+      "Voto, consultas públicas e apoio a projetos renováveis",
+      "Compra de ações de petróleo"
+    ],
+    correta: 2
+  }
+]; 
+</script>
+
+
+<script>
+let currentQuestion = 0;
+let score = 0;
+
+const startBtn = document.getElementById('start-btn');
+const nextBtn = document.getElementById('next-btn');
+const startScreen = document.getElementById('start-screen');
+const quizScreen = document.getElementById('quiz-screen');
+const questionText = document.getElementById('question-text');
+const optionsDiv = document.getElementById('options');
+const scoreDiv = document.getElementById('score');
+
+startBtn.addEventListener('click', startQuiz);
+nextBtn.addEventListener('click', nextQuestion);
+
+function startQuiz() {
+    startScreen.style.display = 'none';
+    quizScreen.style.display = 'block';
+    showQuestion();
+}
+
+function showQuestion() {
+    const q = perguntas[currentQuestion];
+    questionText.textContent = q.pergunta;
+    optionsDiv.innerHTML = '';
+    q.opcoes.forEach((opcao, index) => {
+        const btn = document.createElement('button');
+        btn.textContent = opcao;
+        btn.classList.add('option-btn');
+        btn.addEventListener('click', () => selectOption(btn, index));
+        optionsDiv.appendChild(btn);
+    });
+}
+
+function selectOption(button, selectedIndex) {
+    const q = perguntas[currentQuestion];
+    const buttons = document.querySelectorAll('.option-btn');
+    buttons.forEach(btn => btn.disabled = true);
+
+    if (selectedIndex === q.correta) {
+        button.classList.add('correct');
+        score++;
+    } else {
+        button.classList.add('wrong');
+        buttons[q.correta].classList.add('correct');
+    }
+
+    nextBtn.style.display = 'block';
+}
+
+function nextQuestion() {
+    currentQuestion++;
+    if (currentQuestion < perguntas.length) {
+        showQuestion();
+        nextBtn.style.display = 'none';
+    } else {
+        showScore();
+    }
+}
+
+function showScore() {
+    questionText.textContent = "Quiz finalizado!";
+    optionsDiv.innerHTML = '';
+    nextBtn.style.display = 'none';
+    scoreDiv.style.display = 'block';
+    scoreDiv.textContent = `Você acertou ${score} de ${perguntas.length} questões!`;
+}
+</script>
+
+</body>
+</html>
